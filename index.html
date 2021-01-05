@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Click the button to get your local COVID-19 status automatically. <br>
+You'll have to allow the app to access your location obviously.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.URL = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" + position.coords.latitude + 
+  "&lon=" + position.coords.longitude + "&zoom=18&addressdetails=1";
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var myObj = JSON.parse(this.responseText);
+      window.location.href = "https://coronavirus.data.gov.uk/search?postcode=" + myObj.address.postcode;
+    }
+  };
+  xmlhttp.open("GET", x.URL, true);
+  xmlhttp.send();
+}
+</script>
+
+</body>
+</html>
