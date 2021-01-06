@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<p>Click the button to get your local COVID-19 status automatically. <br>
+<p>Click the button to get your local COVID-19 status automatically.<br>
 You'll have to allow the app to access your location obviously.</p>
 
 <button onclick="getLocation()">Try It</button>
@@ -11,10 +11,15 @@ You'll have to allow the app to access your location obviously.</p>
 
 <script>
 var x = document.getElementById("demo");
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
 
 function getLocation() {
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
+    navigator.geolocation.getCurrentPosition(showPosition,showError,options);
   } else { 
     x.innerHTML = "Geolocation is not supported by this browser.";
   }
@@ -32,6 +37,23 @@ function showPosition(position) {
   };
   xmlhttp.open("GET", x.URL, true);
   xmlhttp.send();
+}
+
+function showError(error) {
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      x.innerHTML = "User denied the request for Geolocation."
+      break;
+    case error.POSITION_UNAVAILABLE:
+      x.innerHTML = "Location information is unavailable."
+      break;
+    case error.TIMEOUT:
+      x.innerHTML = "The request to get user location timed out."
+      break;
+    case error.UNKNOWN_ERROR:
+      x.innerHTML = "An unknown error occurred."
+      break;
+  }
 }
 </script>
 
